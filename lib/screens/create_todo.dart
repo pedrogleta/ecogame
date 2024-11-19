@@ -32,10 +32,11 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Edit Todo'),
+          title: const Text('Editar Tarefa'),
           content: TextField(
             controller: _controller,
-            decoration: const InputDecoration(hintText: 'Enter new todo'),
+            decoration:
+                const InputDecoration(hintText: 'Entrar com nova tarefa'),
           ),
           actions: [
             TextButton(
@@ -46,14 +47,14 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
                 });
                 Navigator.of(context).pop();
               },
-              child: const Text('Save'),
+              child: const Text('Salvar'),
             ),
             TextButton(
               onPressed: () {
                 _controller.clear();
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: const Text('Cancelar'),
             ),
           ],
         );
@@ -65,7 +66,7 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Todo List'),
+        title: const Text('Criar Tarefas'),
       ),
       body: Column(
         children: [
@@ -74,7 +75,7 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
             child: TextField(
               controller: _controller,
               decoration: InputDecoration(
-                labelText: 'Add Todo',
+                labelText: 'Adicionar Tarefa',
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.add),
                   onPressed: _addTodo,

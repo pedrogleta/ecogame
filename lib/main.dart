@@ -1,5 +1,6 @@
 import 'package:ecogame/widgets/game.dart';
 import 'package:flutter/material.dart';
+import 'package:ecogame/screens/create_todo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,6 +49,15 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       body: const Game(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CreateTodoScreen()),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
