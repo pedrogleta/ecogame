@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ecogame/screens/todo.dart';
+import 'package:ecogame/widgets/todo.dart';
 
 class Game extends StatefulWidget {
   const Game({super.key});
@@ -43,7 +43,7 @@ class _GameState extends State<Game> {
               padding: EdgeInsets.all(16.0),
               child: SizedBox(
                 height: 300.0,
-                child: TodoListScreen(),
+                child: TodoList(),
               ),
             ),
           ),

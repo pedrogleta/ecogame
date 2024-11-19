@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class TodoListScreen extends StatefulWidget {
-  const TodoListScreen({super.key});
+class TodoList extends StatefulWidget {
+  const TodoList({super.key});
 
   @override
-  State<TodoListScreen> createState() => _TodoListScreenState();
+  State<TodoList> createState() => _TodoListState();
 }
 
-class _TodoListScreenState extends State<TodoListScreen> {
+class _TodoListState extends State<TodoList> {
   final List<Map<String, String>> tasks = [
     {'task': 'Desligar as luzes que não estão em uso', 'value': '5'},
     {'task': 'Usar lâmpadas de baixo consumo', 'value': '15'},

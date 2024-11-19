@@ -1,4 +1,4 @@
-import 'package:ecogame/screens/game.dart';
+import 'package:ecogame/widgets/game.dart';
 import 'package:flutter/material.dart';
 
 void main() {
