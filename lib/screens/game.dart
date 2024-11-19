@@ -39,8 +39,8 @@ class _GameState extends State<Game> {
           Card(
             margin: const EdgeInsets.all(16.0) +
                 const EdgeInsets.only(left: 16.0, right: 16.0),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
+            child: const Padding(
+              padding: EdgeInsets.all(16.0),
               child: SizedBox(
                 height: 300.0,
                 child: TodoListScreen(),

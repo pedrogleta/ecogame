@@ -9,12 +9,12 @@ class TodoListScreen extends StatefulWidget {
 
 class _TodoListScreenState extends State<TodoListScreen> {
   final List<Map<String, String>> tasks = [
-    {'task': 'Desligar as luzes que não estão em uso', 'value': '5 kWh/mês'},
-    {'task': 'Usar lâmpadas de baixo consumo', 'value': '15 kWh/mês'},
-    {'task': 'Lavar roupas com água fria', 'value': '20 kWh/mês'},
-    {'task': 'Usar um termostato programável', 'value': '25 kWh/mês'},
-    {'task': 'Lavar roupas com água fria', 'value': '20 kWh/mês'},
-    {'task': 'Usar um termostato programável', 'value': '25 kWh/mês'},
+    {'task': 'Desligar as luzes que não estão em uso', 'value': '5'},
+    {'task': 'Usar lâmpadas de baixo consumo', 'value': '15'},
+    {'task': 'Lavar roupas com água fria', 'value': '20'},
+    {'task': 'Usar um termostato programável', 'value': '25'},
+    {'task': 'Lavar roupas com água fria', 'value': '20'},
+    {'task': 'Usar um termostato programável', 'value': '25'},
   ];
 
   final List<bool> _completed = List<bool>.filled(6, false);
@@ -36,7 +36,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                     _completed[index] ? TextDecoration.lineThrough : null,
               ),
             ),
-            subtitle: Text('Economiza: ${tasks[index]['value']}'),
+            subtitle: Text('Economiza: ${tasks[index]['value']} kWh/mês'),
             trailing: Checkbox(
               value: _completed[index],
               onChanged: (bool? value) {
