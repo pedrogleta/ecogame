@@ -4,11 +4,12 @@ class TodoListScreen extends StatelessWidget {
   TodoListScreen({super.key});
 
   final List<Map<String, String>> tasks = [
-    {'task': 'Turn off lights when not in use', 'value': '5 kWh/month'},
-    {'task': 'Unplug devices when not in use', 'value': '10 kWh/month'},
-    {'task': 'Use energy-efficient light bulbs', 'value': '15 kWh/month'},
-    {'task': 'Wash clothes with cold water', 'value': '20 kWh/month'},
-    {'task': 'Use a programmable thermostat', 'value': '25 kWh/month'},
+    {'task': 'Desligar as luzes que não estão em uso', 'value': '5 kWh/mês'},
+    {'task': 'Usar lâmpadas de baixo consumo', 'value': '15 kWh/mês'},
+    {'task': 'Lavar roupas com água fria', 'value': '20 kWh/mês'},
+    {'task': 'Usar um termostato programável', 'value': '25 kWh/mês'},
+    {'task': 'Lavar roupas com água fria', 'value': '20 kWh/mês'},
+    {'task': 'Usar um termostato programável', 'value': '25 kWh/mês'},
   ];
 
   @override
@@ -22,7 +23,7 @@ class TodoListScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(tasks[index]['task']!),
-            subtitle: Text('Saves: ${tasks[index]['value']}'),
+            subtitle: Text('Economiza: ${tasks[index]['value']}'),
           );
         },
       ),
