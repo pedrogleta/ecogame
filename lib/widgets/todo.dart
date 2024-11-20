@@ -1,43 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:ecogame/models/todo.dart';
 
 class TodoList extends StatefulWidget {
-  const TodoList({super.key});
+  final List<Todo> tasks;
+  final Future<void> Function() updateTasks;
+  const TodoList({super.key, required this.tasks, required this.updateTasks});
 
   @override
   State<TodoList> createState() => _TodoListState();
 }
 
 class _TodoListState extends State<TodoList> {
-  List<Map<String, String>> tasks = [];
   List<bool> _completed = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchTasks();
-  }
-
-  Future<void> _fetchTasks() async {
-    final database = openDatabase(join(await getDatabasesPath(), 'ecogame.db'),
-        onCreate: (db, version) => db.execute(
-              'CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, savings INTEGER, done INTEGER)',
-            ),
-        version: 1);
-
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('tasks');
-
-    setState(() {
-      tasks = List.generate(maps.length, (i) {
-        return {
-          'title': maps[i]['title'],
-          'savings': maps[i]['savings'].toString(),
-        };
-      });
-      _completed = List<bool>.filled(tasks.length, false);
-    });
+    _completed = List<bool>.filled(widget.tasks.length, false);
   }
 
   @override
@@ -47,19 +28,22 @@ class _TodoListState extends State<TodoList> {
         title: const Text('Tarefas'),
       ),
       body: ListView.builder(
-        itemCount: tasks.length,
+        itemCount: widget.tasks.length,
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(
-              tasks[index]['title']!,
-              style: TextStyle(
+              widget.tasks[index].title,
+              style: const TextStyle(
                 decoration:
-                    _completed[index] ? TextDecoration.lineThrough : null,
+                    // _completed[index] ? TextDecoration.lineThrough : null,
+                    TextDecoration.lineThrough,
               ),
             ),
-            subtitle: Text('Economiza: ${tasks[index]['savings']} kWh/mês'),
+            subtitle: Text('Economiza: ${widget.tasks[index].savings} kWh/mês'),
             trailing: Checkbox(
-              value: _completed[index],
+              value:
+                  // _completed[index],
+                  widget.tasks[index].done,
               onChanged: (bool? value) {
                 setState(() {
                   _completed[index] = value ?? false;

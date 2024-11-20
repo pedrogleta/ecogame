@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:ecogame/models/todo.dart';
 
 class CreateTodoScreen extends StatefulWidget {
-  const CreateTodoScreen({super.key});
+  final Database database;
+  final Future<void> Function() updateTasks;
+  const CreateTodoScreen(
+      {super.key, required this.database, required this.updateTasks});
 
   @override
   State<CreateTodoScreen> createState() => _CreateTodoScreenState();
@@ -12,29 +16,16 @@ class CreateTodoScreen extends StatefulWidget {
 class _CreateTodoScreenState extends State<CreateTodoScreen> {
   final List<String> _todos = [];
   final TextEditingController _controller = TextEditingController();
-  late Database _database;
 
   @override
   void initState() {
     super.initState();
-    _initDatabase();
-  }
-
-  Future<void> _initDatabase() async {
-    _database = await openDatabase(
-      join(await getDatabasesPath(), 'ecogame.db'),
-      onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, savings INTEGER, done INTEGER)',
-        );
-      },
-      version: 1,
-    );
     _fetchTodos();
   }
 
   Future<void> _fetchTodos() async {
-    final List<Map<String, dynamic>> maps = await _database.query('tasks');
+    final List<Map<String, dynamic>> maps =
+        await widget.database.query('tasks');
     setState(() {
       _todos.clear();
       _todos.addAll(maps.map((task) => task['title'].toString()).toList());
@@ -43,7 +34,7 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
 
   Future<void> _addTodo() async {
     if (_controller.text.isNotEmpty) {
-      await _database.insert(
+      await widget.database.insert(
         'tasks',
         {'title': _controller.text, 'savings': 0, 'done': 0},
         conflictAlgorithm: ConflictAlgorithm.replace,
@@ -52,11 +43,12 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
         _todos.add(_controller.text);
         _controller.clear();
       });
+      widget.updateTasks();
     }
   }
 
   Future<void> _deleteTodo(int index) async {
-    await _database.delete(
+    await widget.database.delete(
       'tasks',
       where: 'title = ?',
       whereArgs: [_todos[index]],
@@ -64,6 +56,7 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
     setState(() {
       _todos.removeAt(index);
     });
+    widget.updateTasks();
   }
 
   Future<void> _editTodoDialog(BuildContext context, int index) async {
@@ -81,7 +74,7 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
           actions: [
             TextButton(
               onPressed: () async {
-                await _database.update(
+                await widget.database.update(
                   'tasks',
                   {'title': _controller.text},
                   where: 'title = ?',
@@ -92,6 +85,7 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
                   _controller.clear();
                 });
                 Navigator.of(context).pop();
+                widget.updateTasks();
               },
               child: const Text('Salvar'),
             ),

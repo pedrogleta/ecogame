@@ -1,6 +1,9 @@
 import 'package:ecogame/widgets/game.dart';
 import 'package:flutter/material.dart';
 import 'package:ecogame/screens/create_todo.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+import 'package:ecogame/models/todo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,6 +35,46 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late Database _database;
+  List<Todo> _tasks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _initDatabase();
+  }
+
+  Future<void> _initDatabase() async {
+    _database = await openDatabase(
+      join(await getDatabasesPath(), 'ecogame.db'),
+      onCreate: (db, version) {
+        return db.execute(
+          'CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, savings INTEGER, done INTEGER)',
+        );
+      },
+      version: 1,
+    );
+    _fetchTasks();
+  }
+
+  Future<void> _fetchTasks() async {
+    final List<Map<String, dynamic>> maps = await _database.query('tasks');
+    setState(() {
+      _tasks = List.generate(maps.length, (i) {
+        return Todo(
+          id: maps[i]['id'],
+          title: maps[i]['title'],
+          savings: maps[i]['savings'],
+          done: maps[i]['done'] == 1,
+        );
+      });
+    });
+  }
+
+  Future<void> _updateTasks() async {
+    _fetchTasks();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,12 +91,14 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      body: const Game(),
+      body: Game(tasks: _tasks, updateTasks: _updateTasks),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const CreateTodoScreen()),
+            MaterialPageRoute(
+                builder: (context) => CreateTodoScreen(
+                    database: _database, updateTasks: _updateTasks)),
           );
         },
         child: const Icon(Icons.add),
