@@ -11,13 +11,9 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
-  List<bool> _completed = [];
-
   @override
   void initState() {
     super.initState();
-    print('tasks: ${widget.tasks}');
-    _completed = List<bool>.filled(widget.tasks.length, false, growable: true);
   }
 
   @override
