@@ -14,6 +14,7 @@ class CreateTodoScreen extends StatefulWidget {
 class _CreateTodoScreenState extends State<CreateTodoScreen> {
   final List<String> _todos = [];
   final TextEditingController _controller = TextEditingController();
+  final TextEditingController _savingsController = TextEditingController();
 
   @override
   void initState() {
@@ -31,15 +32,20 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
   }
 
   Future<void> _addTodo() async {
-    if (_controller.text.isNotEmpty) {
+    if (_controller.text.isNotEmpty && _savingsController.text.isNotEmpty) {
       await widget.database.insert(
         'tasks',
-        {'title': _controller.text, 'savings': 0, 'done': 0},
+        {
+          'title': _controller.text,
+          'savings': int.parse(_savingsController.text),
+          'done': 0
+        },
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
       setState(() {
         _todos.add(_controller.text);
         _controller.clear();
+        _savingsController.clear();
       });
       widget.updateTasks();
     }
@@ -59,28 +65,50 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
 
   Future<void> _editTodoDialog(BuildContext context, int index) async {
     _controller.text = _todos[index];
+    final List<Map<String, dynamic>> maps = await widget.database.query(
+      'tasks',
+      where: 'title = ?',
+      whereArgs: [_todos[index]],
+    );
+    _savingsController.text = maps.first['savings'].toString();
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Editar Tarefa'),
-          content: TextField(
-            controller: _controller,
-            decoration:
-                const InputDecoration(hintText: 'Entrar com nova tarefa'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _controller,
+                decoration:
+                    const InputDecoration(hintText: 'Entrar com nova tarefa'),
+              ),
+              TextField(
+                controller: _savingsController,
+                decoration:
+                    const InputDecoration(hintText: 'Economia (kWh/mês)'),
+                keyboardType: TextInputType.number,
+              ),
+            ],
           ),
           actions: [
             TextButton(
               onPressed: () async {
                 await widget.database.update(
                   'tasks',
-                  {'title': _controller.text},
+                  {
+                    'title': _controller.text,
+                    'savings': int.parse(_savingsController.text)
+                  },
                   where: 'title = ?',
                   whereArgs: [_todos[index]],
                 );
                 setState(() {
                   _todos[index] = _controller.text;
                   _controller.clear();
+                  _savingsController.clear();
                 });
                 Navigator.of(context).pop();
                 widget.updateTasks();
@@ -90,6 +118,7 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
             TextButton(
               onPressed: () {
                 _controller.clear();
+                _savingsController.clear();
                 Navigator.of(context).pop();
               },
               child: const Text('Cancelar'),
@@ -110,15 +139,26 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _controller,
-              decoration: InputDecoration(
-                labelText: 'Adicionar Tarefa',
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: _addTodo,
+            child: Column(
+              children: [
+                TextField(
+                  controller: _controller,
+                  decoration: InputDecoration(
+                    labelText: 'Adicionar Tarefa',
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: _addTodo,
+                    ),
+                  ),
                 ),
-              ),
+                TextField(
+                  controller: _savingsController,
+                  decoration: const InputDecoration(
+                    labelText: 'Economia (kWh/mês)',
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+              ],
             ),
           ),
           Expanded(
