@@ -143,12 +143,8 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
               children: [
                 TextField(
                   controller: _controller,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Adicionar Tarefa',
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.add),
-                      onPressed: _addTodo,
-                    ),
                   ),
                 ),
                 TextField(
@@ -157,6 +153,11 @@ class _CreateTodoScreenState extends State<CreateTodoScreen> {
                     labelText: 'Economia (kWh/mês)',
                   ),
                   keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 8.0),
+                ElevatedButton(
+                  onPressed: _addTodo,
+                  child: const Text('Adicionar Tarefa'),
                 ),
               ],
             ),
