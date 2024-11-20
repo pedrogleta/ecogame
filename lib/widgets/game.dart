@@ -17,7 +17,14 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
-  final double _energyCost = 0.13;
+  final double _energyCost = 0.57;
+
+  double _calculateTotalSavings() {
+    return widget.tasks
+        .where((task) => task.done)
+        .map((task) => task.savings * _energyCost)
+        .fold(0.0, (sum, savings) => sum + savings);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +62,25 @@ class _GameState extends State<Game> {
                     tasks: widget.tasks,
                     updateTasks: widget.updateTasks,
                     updateTaskDone: widget.updateTaskDone),
+              ),
+            ),
+          ),
+          Card(
+            margin: const EdgeInsets.all(16.0),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Text(
+                    'Economia Total',
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    'R\$${_calculateTotalSavings().toStringAsFixed(2)}',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                ],
               ),
             ),
           ),
