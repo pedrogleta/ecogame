@@ -4,7 +4,12 @@ import 'package:ecogame/models/todo.dart';
 class TodoList extends StatefulWidget {
   final List<Todo> tasks;
   final Future<void> Function() updateTasks;
-  const TodoList({super.key, required this.tasks, required this.updateTasks});
+  final Future<void> Function(int, bool) updateTaskDone;
+  const TodoList(
+      {super.key,
+      required this.tasks,
+      required this.updateTasks,
+      required this.updateTaskDone});
 
   @override
   State<TodoList> createState() => _TodoListState();
@@ -37,7 +42,9 @@ class _TodoListState extends State<TodoList> {
             subtitle: Text('Economiza: ${widget.tasks[index].savings} kWh/mês'),
             trailing: Checkbox(
               value: widget.tasks[index].done,
-              onChanged: (bool? value) {},
+              onChanged: (bool? value) {
+                widget.updateTaskDone(widget.tasks[index].id, value ?? false);
+              },
             ),
           );
         },

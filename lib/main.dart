@@ -75,6 +75,16 @@ class _MyHomePageState extends State<MyHomePage> {
     _fetchTasks();
   }
 
+  Future<void> _updateTaskDone(int id, bool done) async {
+    await _database.update(
+      'tasks',
+      {'done': done ? 1 : 0},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    _fetchTasks();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,7 +101,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      body: Game(tasks: _tasks, updateTasks: _updateTasks),
+      body: Game(
+          tasks: _tasks,
+          updateTasks: _updateTasks,
+          updateTaskDone: _updateTaskDone),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(

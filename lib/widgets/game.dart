@@ -5,7 +5,12 @@ import 'package:ecogame/models/todo.dart';
 class Game extends StatefulWidget {
   final List<Todo> tasks;
   final Future<void> Function() updateTasks;
-  const Game({super.key, required this.tasks, required this.updateTasks});
+  final Future<void> Function(int, bool) updateTaskDone;
+  const Game(
+      {super.key,
+      required this.tasks,
+      required this.updateTasks,
+      required this.updateTaskDone});
 
   @override
   State<Game> createState() => _GameState();
@@ -47,7 +52,9 @@ class _GameState extends State<Game> {
               child: SizedBox(
                 height: 300.0,
                 child: TodoList(
-                    tasks: widget.tasks, updateTasks: widget.updateTasks),
+                    tasks: widget.tasks,
+                    updateTasks: widget.updateTasks,
+                    updateTaskDone: widget.updateTaskDone),
               ),
             ),
           ),
