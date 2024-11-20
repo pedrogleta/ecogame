@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 import 'package:ecogame/models/todo.dart';
 
 class TodoList extends StatefulWidget {
@@ -18,7 +16,8 @@ class _TodoListState extends State<TodoList> {
   @override
   void initState() {
     super.initState();
-    _completed = List<bool>.filled(widget.tasks.length, false);
+    print('tasks: ${widget.tasks}');
+    _completed = List<bool>.filled(widget.tasks.length, false, growable: true);
   }
 
   @override
@@ -33,22 +32,16 @@ class _TodoListState extends State<TodoList> {
           return ListTile(
             title: Text(
               widget.tasks[index].title,
-              style: const TextStyle(
-                decoration:
-                    // _completed[index] ? TextDecoration.lineThrough : null,
-                    TextDecoration.lineThrough,
+              style: TextStyle(
+                decoration: widget.tasks[index].done
+                    ? TextDecoration.lineThrough
+                    : null,
               ),
             ),
             subtitle: Text('Economiza: ${widget.tasks[index].savings} kWh/mês'),
             trailing: Checkbox(
-              value:
-                  // _completed[index],
-                  widget.tasks[index].done,
-              onChanged: (bool? value) {
-                setState(() {
-                  _completed[index] = value ?? false;
-                });
-              },
+              value: widget.tasks[index].done,
+              onChanged: (bool? value) {},
             ),
           );
         },

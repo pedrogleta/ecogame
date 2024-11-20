@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-import 'package:ecogame/models/todo.dart';
 
 class CreateTodoScreen extends StatefulWidget {
   final Database database;
