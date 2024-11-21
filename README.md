@@ -1,16 +1,15 @@
-# ecogame
+# EcoGame
 
-A new Flutter project.
+EcoGame é um aplicativo Flutter projetado para ajudar os usuários a rastrear e gerenciar tarefas que contribuem para a economia de energia. O aplicativo permite que os usuários criem, atualizem e excluam tarefas, e calcula a economia total de energia com base nas tarefas concluídas.
 
-## Getting Started
+## Funcionalidades
 
-This project is a starting point for a Flutter application.
+- Criar, atualizar e excluir tarefas
+- Rastrear economia de energia para cada tarefa
+- Calcular economia total de energia
+- Armazenamento persistente usando SQLite
 
-A few resources to get you started if this is your first Flutter project:
+## Pré-requisitos
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Flutter](https://flutter.dev/docs/get-started/install) instalado na sua máquina
+- [SQLite](https://www.sqlite.org/download.html) para gerenciamento de banco de dados local
